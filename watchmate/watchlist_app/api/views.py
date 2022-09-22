@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.views import APIView
 # from snippets.models import Snippet
@@ -19,11 +20,28 @@ from watchlist_app.api.serializers import (WatchListSerializer,
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     
+    def get_queryset(self):
+        return Review.objects.all()
+    
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
-        movie = WatchList.objects.get(pk=pk)
+        watchlist = WatchList.objects.get(pk=pk)
         
-        serializer.save(watchlist=movie)
+        review_user = self.request.user
+        review_queryset = Review.objects.filter(watchlist=watchlist, review_user=review_user)
+
+        if review_queryset.exists():
+            raise ValidationError("You have already reviewed this movie!")
+
+        # if watchlist.number_rating == 0:
+        #     watchlist.avg_rating = serializer.validated_data['rating']
+        # else:
+        #     watchlist.avg_rating = (watchlist.avg_rating + serializer.validated_data['rating'])/2
+
+        # watchlist.number_rating = watchlist.number_rating + 1
+        # watchlist.save()
+        
+        serializer.save(watchlist=watchlist, review_user=review_user)
     
 
 class ReviewList(generics.ListAPIView):
@@ -60,26 +78,32 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 #     def post(self, request, *args, **kwargs):
 #         return self.create(request, *args, **kwargs)
 
-class StreamPlatformVS(viewsets.ViewSet):
+class StreamPlatformVS(viewsets.ModelViewSet):
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
+    #permission_classes = [IsAdminOrReadOnly]
+    #throttle_classes = [AnonRateThrottle]
 
-    def list(self, request):
-        queryset = StreamPlatform.objects.all()
-        serializer = StreamPlatformSerializer(queryset, many=True, context={'request': request})
-        return Response(serializer.data)
+# class StreamPlatformVS(viewsets.ViewSet):
 
-    def retrieve(self, request, pk=None):
-        queryset = StreamPlatform.objects.all()
-        watchlist = get_object_or_404(queryset, pk=pk)
-        serializer = StreamPlatformSerializer(watchlist, context={'request': request})
-        return Response(serializer.data)
+#     def list(self, request):
+#         queryset = StreamPlatform.objects.all()
+#         serializer = StreamPlatformSerializer(queryset, many=True, context={'request': request})
+#         return Response(serializer.data)
 
-    def create(self, request):
-        serializer = StreamPlatformSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+#     def retrieve(self, request, pk=None):
+#         queryset = StreamPlatform.objects.all()
+#         watchlist = get_object_or_404(queryset, pk=pk)
+#         serializer = StreamPlatformSerializer(watchlist, context={'request': request})
+#         return Response(serializer.data)
+
+#     def create(self, request):
+#         serializer = StreamPlatformSerializer(data=request.data, context={'request': request})
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.errors)
 
 class StreamPlatformAV(APIView):
     # permission_classes = [IsAdminOrReadOnly]
