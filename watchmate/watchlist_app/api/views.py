@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
@@ -7,8 +8,19 @@ from rest_framework.views import APIView
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 # from rest_framework import mixins
+
+# from watchlist_app.models import Gig,GigReview
+# from .serializers import GigSerializer,GigReviewSerializer
+
+from rest_framework.generics import GenericAPIView
 from rest_framework import generics
 from rest_framework import viewsets
+
+# from rest_framework.mixins import ListModelMixin, CreateModelMixin , RetrieveModelMixin , DestroyModelMixin, UpdateModelMixin
+# from rest_framework.permissions import AllowAny
+from django.db.models import Avg
+
+from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
  
 # from watchlist_app.models import Movie
 from watchlist_app.models import WatchList, StreamPlatform, Review
@@ -33,13 +45,12 @@ class ReviewCreate(generics.CreateAPIView):
         if review_queryset.exists():
             raise ValidationError("You have already reviewed this movie!")
 
-        # if watchlist.number_rating == 0:
-        #     watchlist.avg_rating = serializer.validated_data['rating']
-        # else:
-        #     watchlist.avg_rating = (watchlist.avg_rating + serializer.validated_data['rating'])/2
-
-        # watchlist.number_rating = watchlist.number_rating + 1
-        # watchlist.save()
+        if watchlist.number_rating == 0:
+            watchlist.avg_rating = serializer.validated_data['rating']
+        else:
+            watchlist.avg_rating = (watchlist.avg_rating + serializer.validated_data['rating'])/2
+        watchlist.number_rating = watchlist.number_rating + 1
+        watchlist.save()
         
         serializer.save(watchlist=watchlist, review_user=review_user)
     
@@ -47,6 +58,7 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    # permission_classes = [AdminOrReadOnly]
     
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -55,7 +67,8 @@ class ReviewList(generics.ListAPIView):
     
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
-    serializer_class = ReviewSerializer    
+    serializer_class = ReviewSerializer
+    permission_classes = [IsReviewUserOrReadOnly]    
 
     
 # Class based views with generics and mixins
@@ -155,6 +168,8 @@ class StreamPlatformDetailAV(APIView):
 class WatchListAV(APIView):
     #permission_classes = [IsAdminOrReadOnly]
     #throttle_classes = [AnonRateThrottle]
+    def get_queryset(self):
+        return WatchList.objects.all().annotate(_average_rating=Avg('reviews__rating')) 
 
     def get(self, request):
         movies = WatchList.objects.all()
@@ -288,4 +303,101 @@ class WatchDetailAV(APIView):
 #         movie = Movie.objects.get(pk=pk)
 #         movie.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
+
+#List and create (pk not required)
+# class GigsListAPI(GenericAPIView, ListModelMixin ):
+#     def get_queryset(self):
+#        username = self.kwargs['user']
+#        return Gig.objects.filter(seller=username)
+#     serializer_class = GigSerializer
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request , *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+# class GigsListCategorywise(GenericAPIView, ListModelMixin ):
+#     def get_queryset(self):
+#        SearchedCategory = self.kwargs['category']
+#        return Gigs.objects.filter(category=SearchedCategory)
+#     serializer_class = GigsSerializer
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request , *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+# Working below Gigs Exp
+# class GigsListAll(GenericAPIView, ListModelMixin ):
+#     queryset = Gig.objects.all()
+#     serializer_class = GigSerializer
+#     permission_classes = (AllowAny,)
+
+#     # def get_queryset(self):
+
+#     #     return Gig.objects.all().annotate(_average_rating=Avg('reviews__rating')
+
+#     def get(self, request , *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+# class GigsListAll(ListModelMixin, GenericAPIView): 
+#     serializer_class = GigSerializer
+#     permission_classes = (AllowAny,)
+
+#     def get_queryset(self):
+#         return Gig.objects.all().annotate(_average_rating=Avg('gigreviews__rating')) 
     
+#     def get(self, request , *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+    
+# class GigsCreateAPI(GenericAPIView, CreateModelMixin):
+#     queryset = Gig.objects.all()
+#     serializer_class = GigSerializer
+#     permission_classes = (AllowAny,)
+
+#     def post(self, request , *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+
+# # Retrieve, update and delete (pk required)
+# class RUDGigsAPI(GenericAPIView, RetrieveModelMixin, UpdateModelMixin,  DestroyModelMixin):
+#     queryset = Gig.objects.all()
+#     serializer_class = GigSerializer
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request , *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+    
+#     def put(self, request , *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+
+#     def put(self, request , *args, **kwargs):
+#         return self.partial_update(request, *args, **kwargs)
+    
+#     def delete(self, request , *args, **kwargs): 
+#         pk = kwargs.get('pk')
+#         p = Gig.objects.get(id=pk)
+#         if p.images:
+#             p.images.delete() 
+#         return self.destroy(request, *args, **kwargs)
+
+
+
+# # VIEWS FOR REVIEWS MODEL
+# class GigReviewListAPI(GenericAPIView, ListModelMixin ):
+#     def get_queryset(self):
+#         # pk = self.kwargs['pk']
+#         # return GigReview.objects.filter(item=pk)
+#         item = self.kwargs['item']
+#         return GigReview.objects.filter(item=item)
+#     #    return GigReview.objects.all()
+#     serializer_class = GigReviewSerializer
+#     permission_classes = (AllowAny,)
+
+#     def get(self, request , *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+# class ReviewsCreateAPI(GenericAPIView, CreateModelMixin):
+#     queryset = GigReview.objects.all()
+#     serializer_class = GigReviewSerializer
+#     permission_classes = (AllowAny,)
+
+#     def post(self, request , *args, **kwargs):
+#         return self.create(request, *args, **kwargs)  

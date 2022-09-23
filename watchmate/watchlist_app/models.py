@@ -1,6 +1,8 @@
 from django.db import models
+from django.db.models import Avg
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+
 
 class StreamPlatform(models.Model):
     name = models.CharField(max_length=30)
@@ -18,7 +20,13 @@ class WatchList(models.Model):
     avg_rating = models.FloatField(default=0)
     number_rating = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
-
+    
+    @property
+    def average_rating(self):
+        if hasattr(self, '_average_rating'):
+            return self._average_rating
+        return self.reviews.aggregate(Avg('rating'))
+    
     def __str__(self):
         return self.title
     
@@ -30,9 +38,13 @@ class Review(models.Model):
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
+    
+    # @property
+    # def average_rating(self):
+    #     return self.rating.aggregate(Avg('rating'))['rating_avg']
 
     def __str__(self):
-        return str(self.rating) + " | " + self.watchlist.title
+        return str(self.rating) + " | " + self.watchlist.title 
         #return str(self.rating) + " | " + self.watchlist.title + " | " + str(self.review_user)
 
 # Create your models here.
@@ -43,3 +55,28 @@ class Review(models.Model):
     
 #     def __str__(self):
 #         return self.name
+# Create your models here.
+# class Gig(models.Model):
+#     title = models.CharField(max_length=255)
+#     #category = models.ForeignKey(Categories , on_delete=models.CASCADE)
+#     price = models.DecimalField(max_digits=6, decimal_places=2)
+#     details = models.TextField()
+#     images = models.ImageField(blank=True)
+#     seller = models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+
+#     # @property
+#     # def average_rating(self):
+#     #     return self.gigreviews.aggregate(Avg('rating'))['rating_avg']
+    
+#     @property
+#     def average_rating(self):
+#         if hasattr(self, '_average_rating'):
+#             return self._average_rating
+#         return self.gigreviews.aggregate(Avg('rating'))
+    
+# class GigReview(models.Model):
+#     rating = models.SmallIntegerField( default=0,validators=[MaxValueValidator(5),MinValueValidator(1)])
+#     comment = models.CharField(max_length=500)
+#     item =  models.ForeignKey(Gig , on_delete=models.CASCADE, related_name="gigreviews")
+#     buyer = models.ForeignKey(User ,default=None, on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)

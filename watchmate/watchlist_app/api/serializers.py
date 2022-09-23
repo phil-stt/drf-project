@@ -2,6 +2,7 @@ from wsgiref.validate import validator
 from rest_framework import serializers
 # from watchlist_app.models import Movie
 from watchlist_app.models import WatchList, StreamPlatform, Review
+#from watchlist_app.models import Gig, GigReview
 
 class ReviewSerializer(serializers.ModelSerializer):
     review_user = serializers.StringRelatedField(read_only=True)
@@ -14,6 +15,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 class WatchListSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
     # platform = serializers.CharField(source='platform.name')
+    average_rating = serializers.SerializerMethodField()
+    def get_average_rating(self, obj):
+        return obj.average_rating
 
     class Meta:
         model = WatchList
@@ -97,6 +101,23 @@ class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
 #         else:
 #             return value
     
+# class GigSerializer (serializers.ModelSerializer):
+#     class Meta:
+#         model = Gig
+#         fields = ['id','title','price','details','seller','images']
 
+#Working below for Gig exp
+# class GigSerializer (serializers.ModelSerializer):
+#     average_rating = serializers.SerializerMethodField()
+#     def get_average_rating(self, obj):
+#         return obj.average_rating
+#     class Meta:
+#         model = Gig
+#         fields = ['id','title','price','details','seller','images','average_rating']
+
+# class GigReviewSerializer (serializers.ModelSerializer):
+#     class Meta:
+#         model = GigReview
+#         fields = ['id','rating','comment','item','buyer','created_at']
     
 
