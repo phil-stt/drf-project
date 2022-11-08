@@ -55,28 +55,3 @@ class Review(models.Model):
     
 #     def __str__(self):
 #         return self.name
-# Create your models here.
-# class Gig(models.Model):
-#     title = models.CharField(max_length=255)
-#     #category = models.ForeignKey(Categories , on_delete=models.CASCADE)
-#     price = models.DecimalField(max_digits=6, decimal_places=2)
-#     details = models.TextField()
-#     images = models.ImageField(blank=True)
-#     seller = models.ForeignKey(User,default=None, on_delete=models.CASCADE)
-
-#     # @property
-#     # def average_rating(self):
-#     #     return self.gigreviews.aggregate(Avg('rating'))['rating_avg']
-    
-#     @property
-#     def average_rating(self):
-#         if hasattr(self, '_average_rating'):
-#             return self._average_rating
-#         return self.gigreviews.aggregate(Avg('rating'))
-    
-# class GigReview(models.Model):
-#     rating = models.SmallIntegerField( default=0,validators=[MaxValueValidator(5),MinValueValidator(1)])
-#     comment = models.CharField(max_length=500)
-#     item =  models.ForeignKey(Gig , on_delete=models.CASCADE, related_name="gigreviews")
-#     buyer = models.ForeignKey(User ,default=None, on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)

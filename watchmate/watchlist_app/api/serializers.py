@@ -97,24 +97,4 @@ class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
 #             raise serializers.ValidationError("Name is too short")
 #         else:
 #             return value
-    
-# class GigSerializer (serializers.ModelSerializer):
-#     class Meta:
-#         model = Gig
-#         fields = ['id','title','price','details','seller','images']
-
-#Working below for Gig exp
-# class GigSerializer (serializers.ModelSerializer):
-#     average_rating = serializers.SerializerMethodField()
-#     def get_average_rating(self, obj):
-#         return obj.average_rating
-#     class Meta:
-#         model = Gig
-#         fields = ['id','title','price','details','seller','images','average_rating']
-
-# class GigReviewSerializer (serializers.ModelSerializer):
-#     class Meta:
-#         model = GigReview
-#         fields = ['id','rating','comment','item','buyer','created_at']
-    
 
