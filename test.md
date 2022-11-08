@@ -3,7 +3,7 @@
 ## Description
 Watchmate is an example of a headless app designed to create, update and publish movie watchlists and user reviews similar to IMDb.   It was built using Django Rest Framework and provides a fully functional API with access control, throttling, automated test scripts, and simple token authentication.
 
-## Table of Contents (Optional)
+## Table of Contents
 
 - [Installation](#installation)
 - [Tests](#tests)
@@ -14,11 +14,11 @@ Watchmate is an example of a headless app designed to create, update and publish
 
 - Follow the [Django Project Guide](https://docs.djangoproject.com/en/4.1/intro/install/) for getting started building/configuring a project with Django. 
 - Clone or download the repo
-- Create Virtual Environment, and Activate (Python 3.7.4 or higher) 
-- `pip install requirements.text` to install Django and dependencies
--  In the watchmate directory, run `python manage.py migrate` to create a local SQLite3 database and migrate models
--  Run `python manage.py createsuperuser` to create your admin account
-- `python mange.py runserver` to start the app
+- Create a virtual enviornment in the project directory (Python 3.7.4 or higher) 
+- In the activated environment, run `pip install requirements.text` to install Django and dependencies
+- In the watchmate directory, run `python manage.py migrate` to create a local SQLite3 database and migrate all models
+- Run `python manage.py createsuperuser` to create your admin account
+- Run `python mange.py runserver` to start the app
 
 
 ## Tests
@@ -29,7 +29,7 @@ To test the application functionality (Simple Token only), run `python -Wa manag
 
 1.  Access the endpoint in your browser at: `http://127.0.0.1:8000/watch/list/`
 2.  Access the Database Admin  at: `http://127.0.0.1:8000/dashboard/`
-3.  Register new basic user at: `http://127.0.0.1:8000/account/register/` with the required data (username, email, password, password2)
+3.  Register new basic user at: `http://127.0.0.1:8000/account/register/` with the required form data (username, email, password, password2)
 4.  Login and obtain token at:  `http://127.0.0.1:8000/account/login/`
 5.  Add a streaming platform here (Admin only): `POST http://127.0.0.1:8000/watch/stream/`
    ```
@@ -49,6 +49,11 @@ To test the application functionality (Simple Token only), run `python -Wa manag
     }
 
 7.  Add a review for a movie here:  `http://127.0.0.1:8000/watch/1/reviews/create`
+    ```
+    {
+        "rating": 5,
+        "description": "Excellent movie for both kids and grown-ups alike"
+    }
 
 
 ## License
