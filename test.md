@@ -1,4 +1,4 @@
-# <Your-Project-Title>
+# WatchMate
 
 ## Description
 
