@@ -1,17 +1,9 @@
 # WatchMate
 
 ## Description
-
-Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
-
-- What was your motivation?
-- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-- What problem does it solve?
-- What did you learn?
+Watchmate is a headless app designed to create and publish move watchlists similar to IMDb.  It was built using Django Rest Framework, and provides a fully functional API with access control, throttling, and JWT token authentication.
 
 ## Table of Contents (Optional)
-
-If your README is long, add a table of contents to make it easy for users to find what they need.
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -20,7 +12,13 @@ If your README is long, add a table of contents to make it easy for users to fin
 
 ## Installation
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+- Follow the [Django Project Guide](https://docs.djangoproject.com/en/4.1/intro/install/) for getting started building/configuring a project with Django. 
+- Clone or download the repo
+- Create Virtual Environment, and Activate (Python 3.7.4 or higher) 
+- `pip install requirements.text` to install Django and dependencies
+-  In watchmate directory, `python manage.py migrate` to setup your database (SQLite)
+-  Run `python manage.py createsuperuser` to create your admin account
+- `python mange.py runserver` to start the app
 
 ## Usage
 
