@@ -1,7 +1,7 @@
 # WatchMate
 
 ## Description
-Watchmate is a headless app designed to create, update and publish movie watchlists and user reviews similar to IMDb.  It was built using Django Rest Framework, and provides a fully functional API with access control, throttling, and simple token authentication.
+Watchmate is an example of a headless app designed to create, update and publish movie watchlists and user reviews similar to IMDb.   It was built using Django Rest Framework and provides a fully functional API with access control, throttling, automated test scripts, and simple token authentication.
 
 ## Table of Contents (Optional)
 
@@ -48,14 +48,14 @@ To test the application functionality (Simple Token only), run `python -Wa manag
         "active": true
     }
 
-7.  Add a review for a movie here:  `http://127.0.0.1:8000/watch/13/reviews/create`
+7.  Add a review for a movie here:  `http://127.0.0.1:8000/watch/1/reviews/create`
 
 
 ## License
 
 MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) 2022 Standard Timed Text, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
