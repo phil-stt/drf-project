@@ -1,6 +1,6 @@
 from wsgiref.validate import validator
 from rest_framework import serializers
-# from watchlist_app.models import Movie
+#from watchlist_app.models import Movie
 from watchlist_app.models import WatchList, StreamPlatform, Review
 #from watchlist_app.models import Gig, GigReview
 
@@ -13,8 +13,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         # fields = "__all__"
 
 class WatchListSerializer(serializers.ModelSerializer):
-    reviews = ReviewSerializer(many=True, read_only=True)
-    # platform = serializers.CharField(source='platform.name')
+    # reviews = ReviewSerializer(many=True, read_only=True)
+    platform = serializers.CharField(source='platform.name')
     average_rating = serializers.SerializerMethodField()
     def get_average_rating(self, obj):
         return obj.average_rating
@@ -35,9 +35,6 @@ class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = StreamPlatform
         fields = "__all__"
-
-
-
 
 # class MovieSerializer(serializers.ModelSerializer):
 #     len_name = serializers.SerializerMethodField()
@@ -66,7 +63,7 @@ class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
     #     else:
     #         return value
 
-# Regular Serializer
+#Regular Serializer
 # def name_length(value):
 #     if len(value) < 2:
 #         raise serializers.ValidationError("Name is too short")

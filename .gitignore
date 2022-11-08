@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 watchmate/watchmate/__pycache__
+watchmate/user_app/__pycache__
 watchmate/watchlist_app/__pycache__
 watchmate/watchlist_app/api/__pycache__
 __pycache__/
