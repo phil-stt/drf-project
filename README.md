@@ -18,6 +18,9 @@ Watchmate is an example of a headless app designed to create, update and publish
 
 - Follow the [Django Project Guide](https://docs.djangoproject.com/en/4.1/intro/install/) for getting started building/configuring a project with Django. 
 - Clone or download the repo
+```
+git clone https://github.com/phil-stt/drf-project
+```
 - Create a virtual enviornment in the project directory (Python 3.7.4 or higher) 
 - In the activated environment, run `pip install requirements.text` to install Django and dependencies
 - In the watchmate directory, run `python manage.py migrate` to create a local SQLite3 database and migrate all models
