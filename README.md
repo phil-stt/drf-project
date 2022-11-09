@@ -3,7 +3,9 @@
 ## Description
 Watchmate is an example of a headless app designed to create, update and publish movie watchlists and user reviews similar to IMDb.   It was built using Django Rest Framework and provides a fully functional API with access control, validation, throttling, automated test scripts, and simple token authentication.
 
-* [![Python][Python.org]][Python-url]
+[![Python][Python.org]][Python-url]
+[![Django][Django]][Django-url]
+[![DjangoREST][DjangoREST]][DjangoREST-url]
 
 ## Table of Contents
 
@@ -114,7 +116,11 @@ SOFTWARE.
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+[JQuery-url]: https://jquery.com
+[Django]: https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white
+[Django-url]: https://www.djangoproject.com/
+[DjangoREST]: https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=ff1709&labelColor=gray
+[DjangoREST-url]: https://www.django-rest-framework.org/ 
 
 
 
