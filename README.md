@@ -21,8 +21,17 @@ Watchmate is an example of a headless app designed to create, update and publish
     ```
     git clone https://github.com/phil-stt/drf-project
     ```
-- Create a virtual enviornment in the project directory (Python 3.7.4 or higher) 
-- In the activated environment, run `pip install requirements.text` to install Django and dependencies
+- Create a virtual enviornment in the project directory (Python 3.7.4 or higher)
+    ```
+    python3 -m venv env
+    ```
+- In the activated environment, install Django and dependencies
+    ```
+    source env/bin/activate
+    cd watchmate
+    python3 -m pip install -r requirements.txt
+    ```
+
 - In the watchmate directory, run `python manage.py migrate` to create a local SQLite3 database and migrate all models
 - Run `python manage.py createsuperuser` to create your admin account
 - Run `python mange.py runserver` to start the app
